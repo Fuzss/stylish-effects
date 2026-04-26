@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -202,7 +201,7 @@ public abstract class AbstractMobEffectRenderer {
     }
 
     /**
-     * @see Gui#extractEffects(GuiGraphicsExtractor, DeltaTracker)
+     * @see Gui#renderEffects(GuiGraphics, DeltaTracker)
      */
     protected float getBlinkingAlpha(MobEffectInstance mobEffect) {
         if (!mobEffect.isAmbient() && !mobEffect.isInfiniteDuration() && mobEffect.getDuration() <= 200) {
