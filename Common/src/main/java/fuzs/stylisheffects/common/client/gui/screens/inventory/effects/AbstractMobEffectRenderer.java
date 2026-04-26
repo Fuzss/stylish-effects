@@ -1,24 +1,23 @@
-package fuzs.stylisheffects.common.client.gui.screens.inventory.effects;
+package fuzs.stylisheffects.client.gui.screens.inventory.effects;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Either;
-import fuzs.puzzleslib.common.api.client.gui.v2.AnchorPoint;
-import fuzs.puzzleslib.common.api.client.gui.v2.ScreenHelper;
-import fuzs.stylisheffects.common.StylishEffects;
-import fuzs.stylisheffects.common.client.handler.EffectDurationHandler;
-import fuzs.stylisheffects.common.client.util.TimeFormattingHelper;
-import fuzs.stylisheffects.common.config.BarPosition;
-import fuzs.stylisheffects.common.config.ClientConfig;
-import fuzs.stylisheffects.common.config.ScreenSide;
-import fuzs.stylisheffects.common.config.WidgetType;
-import fuzs.stylisheffects.common.services.ClientAbstractions;
+import fuzs.puzzleslib.api.client.gui.v2.AnchorPoint;
+import fuzs.puzzleslib.api.client.gui.v2.ScreenHelper;
+import fuzs.stylisheffects.StylishEffects;
+import fuzs.stylisheffects.client.handler.EffectDurationHandler;
+import fuzs.stylisheffects.client.util.TimeFormattingHelper;
+import fuzs.stylisheffects.config.BarPosition;
+import fuzs.stylisheffects.config.ClientConfig;
+import fuzs.stylisheffects.config.ScreenSide;
+import fuzs.stylisheffects.config.WidgetType;
+import fuzs.stylisheffects.services.ClientAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -195,14 +194,14 @@ public abstract class AbstractMobEffectRenderer {
         };
     }
 
-    public void renderEffectWidgets(GuiGraphicsExtractor guiGraphics, List<MobEffectInstance> mobEffects) {
+    public void renderEffectWidgets(GuiGraphics guiGraphics, List<MobEffectInstance> mobEffects) {
         for (Pair<MobEffectInstance, Vector2ic> entry : this.getEffectPositions(mobEffects)) {
             this.renderWidget(guiGraphics, entry.getValue().x(), entry.getValue().y(), entry.getKey());
         }
     }
 
     /**
-     * @see Gui#extractEffects(GuiGraphicsExtractor, DeltaTracker)
+     * @see Gui#renderEffects(GuiGraphics, DeltaTracker)
      */
     protected float getBlinkingAlpha(MobEffectInstance mobEffect) {
         if (!mobEffect.isAmbient() && !mobEffect.isInfiniteDuration() && mobEffect.getDuration() <= 200) {
@@ -258,14 +257,14 @@ public abstract class AbstractMobEffectRenderer {
         return (int) Math.ceil(beneficialEffectsAmount / (float) this.getMaxClampedColumns());
     }
 
-    protected ActiveTextCollector activeTextCollector(GuiGraphicsExtractor guiGraphics) {
-        ActiveTextCollector activeTextCollector = guiGraphics.textRenderer(GuiGraphicsExtractor.HoveredTextEffects.NONE);
+    protected ActiveTextCollector activeTextCollector(GuiGraphics guiGraphics) {
+        ActiveTextCollector activeTextCollector = guiGraphics.textRenderer(GuiGraphics.HoveredTextEffects.NONE);
         activeTextCollector.defaultParameters(activeTextCollector.defaultParameters()
                 .withOpacity((float) this.config.widgetTransparency));
         return activeTextCollector;
     }
 
-    public final void renderWidget(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    public final void renderWidget(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         guiGraphics.pose().pushMatrix();
         float scale = this.getWidgetScale();
         if (scale != 1.0F) {
@@ -278,7 +277,7 @@ public abstract class AbstractMobEffectRenderer {
         guiGraphics.pose().popMatrix();
     }
 
-    protected void renderContents(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    protected void renderContents(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         this.renderBackground(guiGraphics, posX, posY, mobEffect);
         if (!this.renderCustomSprite(guiGraphics, posX, posY, mobEffect)) {
             this.renderSprite(guiGraphics, posX, posY, mobEffect);
@@ -290,7 +289,7 @@ public abstract class AbstractMobEffectRenderer {
         }
     }
 
-    protected void renderBackground(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    protected void renderBackground(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         Identifier backgroundSprite = this.getEffectBackgroundSprite(
                 mobEffect.isAmbient() && this.config.ambientBorder);
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
@@ -329,7 +328,7 @@ public abstract class AbstractMobEffectRenderer {
 
     protected abstract Identifier getEffectBarSprite(BarPosition barPosition);
 
-    protected void renderSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    protected void renderSprite(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         float blinkingAlpha = this.config.blinkingSprite ? this.getBlinkingAlpha(mobEffect) : 1.0F;
         int colorValue = ARGB.white(blinkingAlpha * (float) this.config.widgetTransparency);
         Identifier mobEffectSprite = Gui.getMobEffectSprite(mobEffect.getEffect());
@@ -342,7 +341,7 @@ public abstract class AbstractMobEffectRenderer {
                 colorValue);
     }
 
-    private boolean renderCustomSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    private boolean renderCustomSprite(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         return this.environment.map((Gui gui) -> {
             return ClientAbstractions.INSTANCE.renderGuiIcon(mobEffect,
                     gui,
@@ -356,7 +355,7 @@ public abstract class AbstractMobEffectRenderer {
         });
     }
 
-    protected void renderForeground(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    protected void renderForeground(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         if (mobEffect.getAmplifier() >= 1 && mobEffect.getAmplifier() <= 8) {
             int mobEffectColor = this.config.effectAmplifier.amplifierColor.getMobEffectColor(mobEffect);
             AnchorPoint.Positioner positioner = this.config.effectAmplifier.amplifierPosition.createPositioner(this.getWidth(),
@@ -392,18 +391,17 @@ public abstract class AbstractMobEffectRenderer {
         }
     }
 
-    protected void renderLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    protected void renderLabels(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         Component component = this.getEffectDuration(mobEffect, this.getWidth() - this.getBorderSize() * 2);
         if (component != null) {
-            Font font = Minecraft.getInstance().font;
-            int x = posX + this.getDurationOffsetX() - font.width(component) / 2;
+            int x = posX + this.getDurationOffsetX() - Minecraft.getInstance().font.width(component) / 2;
             int y = posY + this.getDurationOffsetY();
             Component backgroundComponent = ComponentUtils.mergeStyles(component,
                     Style.EMPTY.withColor(ChatFormatting.BLACK));
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     if (i != 0 || j != 0) {
-                        guiGraphics.text(font,
+                        guiGraphics.drawString(Minecraft.getInstance().font,
                                 backgroundComponent,
                                 x + i,
                                 y + j,
@@ -414,7 +412,7 @@ public abstract class AbstractMobEffectRenderer {
             }
 
             Style durationStyle = this.config.effectDuration.durationColor.getMobEffectStyle(mobEffect);
-            guiGraphics.text(font,
+            guiGraphics.drawString(Minecraft.getInstance().font,
                     ComponentUtils.mergeStyles(component, durationStyle),
                     x,
                     y,
