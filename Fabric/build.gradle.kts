@@ -3,13 +3,13 @@ plugins {
 }
 
 dependencies {
-    modApi(libs.fabricapi.fabric)
-    modApi(libs.puzzleslib.fabric)
-    modCompileOnly(libs.jeiapi.common)
-    modLocalRuntime(libs.jei.fabric)
-//    modCompileOnly(libs.reiapi.fabric)
-//    modCompileOnly(libs.reidefaultplugin.fabric)
-//    modLocalRuntime(libs.bundles.rei.fabric)
+    modApi(sharedLibs.fabricapi.fabric)
+    modApi(sharedLibs.puzzleslib.fabric)
+    modCompileOnly(sharedLibs.jeiapi.common)
+    modLocalRuntime(sharedLibs.jei.fabric)
+//    modCompileOnly(sharedLibs.reiapi.fabric)
+//    modCompileOnly(sharedLibs.reidefaultplugin.fabric)
+//    modLocalRuntime(sharedLibs.bundles.rei.fabric)
 }
 
 multiloader {
