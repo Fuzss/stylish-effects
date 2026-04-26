@@ -1,18 +1,18 @@
-package fuzs.stylisheffects.client.gui.screens.inventory.effects;
+package fuzs.stylisheffects.common.client.gui.screens.inventory.effects;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
-import fuzs.puzzleslib.api.util.v1.ComponentHelper;
-import fuzs.stylisheffects.StylishEffects;
-import fuzs.stylisheffects.config.BarPosition;
-import fuzs.stylisheffects.config.WidgetType;
-import fuzs.stylisheffects.services.ClientAbstractions;
+import fuzs.puzzleslib.common.api.util.v1.ComponentHelper;
+import fuzs.stylisheffects.common.StylishEffects;
+import fuzs.stylisheffects.common.config.BarPosition;
+import fuzs.stylisheffects.common.config.WidgetType;
+import fuzs.stylisheffects.common.services.ClientAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
@@ -122,7 +122,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
         }
 
         @Override
-        protected void renderLabels(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        protected void renderLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
             if (!this.renderCustomLabels(guiGraphics, posX, posY, mobEffect)) {
                 Font font = Minecraft.getInstance().font;
                 Component displayNameComponent = this.getEffectDisplayName(mobEffect, false);
@@ -168,7 +168,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
             }
         }
 
-        protected boolean renderCustomLabels(GuiGraphics guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        protected boolean renderCustomLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
             return this.environment.right().map((AbstractContainerScreen<?> screen) -> {
                 return ClientAbstractions.INSTANCE.renderInventoryText(mobEffect, screen, guiGraphics, posX, posY, 0);
             }).orElse(Boolean.FALSE);

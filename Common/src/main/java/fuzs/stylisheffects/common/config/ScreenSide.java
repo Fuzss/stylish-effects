@@ -1,4 +1,4 @@
-package fuzs.stylisheffects.config;
+package fuzs.stylisheffects.common.config;
 
 public enum ScreenSide {
     LEFT,

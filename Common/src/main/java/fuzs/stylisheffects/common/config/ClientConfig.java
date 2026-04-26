@@ -1,11 +1,11 @@
-package fuzs.stylisheffects.config;
+package fuzs.stylisheffects.common.config;
 
-import fuzs.puzzleslib.api.client.gui.v2.AnchorPoint;
-import fuzs.puzzleslib.api.config.v3.Config;
-import fuzs.puzzleslib.api.config.v3.ConfigCore;
-import fuzs.puzzleslib.api.config.v3.serialization.ConfigDataSet;
-import fuzs.stylisheffects.client.gui.screens.inventory.effects.AbstractMobEffectRenderer;
-import fuzs.stylisheffects.client.util.ColorUtil;
+import fuzs.puzzleslib.common.api.client.gui.v2.AnchorPoint;
+import fuzs.puzzleslib.common.api.config.v3.Config;
+import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
+import fuzs.puzzleslib.common.api.config.v3.serialization.ConfigDataSet;
+import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractMobEffectRenderer;
+import fuzs.stylisheffects.common.client.util.ColorUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.effect.MobEffectInstance;

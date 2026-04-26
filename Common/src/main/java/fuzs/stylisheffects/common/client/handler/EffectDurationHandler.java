@@ -1,7 +1,7 @@
-package fuzs.stylisheffects.client.handler;
+package fuzs.stylisheffects.common.client.handler;
 
-import fuzs.stylisheffects.StylishEffects;
-import fuzs.stylisheffects.config.ClientConfig;
+import fuzs.stylisheffects.common.StylishEffects;
+import fuzs.stylisheffects.common.config.ClientConfig;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.Minecraft;

@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "stylisheffects",
         "group": "fuzs.stylisheffects",
         "name": "Stylish Effects",
-        "version": "21.11.3",
+        "version": "26.1.0",
         "authors": [
             "Fuzs"
         ],
@@ -58,7 +59,7 @@
         },
         {
             "name": "github",
-            "slug": "stylisheffects"
+            "slug": "stylish-effects"
         },
         {
             "name": "modrinth",

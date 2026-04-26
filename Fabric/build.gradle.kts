@@ -1,3 +1,6 @@
+import fuzs.multiloader.extension.commonProject
+import fuzs.multiloader.extension.packageName
+
 plugins {
     id("fuzs.multiloader.multiloader-convention-plugins-fabric")
 }
@@ -17,11 +20,11 @@ multiloader {
         json {
             entrypoint(
                 "jei_mod_plugin",
-                "${project.group}.integration.jei.StylishEffectsJeiPlugin"
+                "${project.group}.${project.commonProject.packageName}.integration.jei.StylishEffectsJeiPlugin"
             )
 //            entrypoint(
 //                "rei_client",
-//                "${project.group}.integration.rei.StylishEffectsReiClientPlugin"
+//                "${project.group}.${project.commonProject.packageName}.integration.rei.StylishEffectsReiClientPlugin"
 //            )
         }
     }

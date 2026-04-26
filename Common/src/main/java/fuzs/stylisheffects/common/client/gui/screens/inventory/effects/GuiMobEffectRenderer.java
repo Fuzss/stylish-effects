@@ -1,11 +1,11 @@
-package fuzs.stylisheffects.client.gui.screens.inventory.effects;
+package fuzs.stylisheffects.common.client.gui.screens.inventory.effects;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
-import fuzs.stylisheffects.StylishEffects;
-import fuzs.stylisheffects.config.BarPosition;
-import fuzs.stylisheffects.config.WidgetType;
+import fuzs.stylisheffects.common.StylishEffects;
+import fuzs.stylisheffects.common.config.BarPosition;
+import fuzs.stylisheffects.common.config.WidgetType;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Holder;

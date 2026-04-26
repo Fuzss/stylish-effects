@@ -1,7 +1,7 @@
 package fuzs.stylisheffects.neoforge;
 
-import fuzs.puzzleslib.api.core.v1.ModConstructor;
-import fuzs.stylisheffects.StylishEffects;
+import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
+import fuzs.stylisheffects.common.StylishEffects;
 import net.neoforged.fml.common.Mod;
 
 @Mod(StylishEffects.MOD_ID)

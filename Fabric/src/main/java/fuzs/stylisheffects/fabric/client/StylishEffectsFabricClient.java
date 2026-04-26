@@ -1,8 +1,8 @@
 package fuzs.stylisheffects.fabric.client;
 
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
-import fuzs.stylisheffects.StylishEffects;
-import fuzs.stylisheffects.client.StylishEffectsClient;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
+import fuzs.stylisheffects.common.StylishEffects;
+import fuzs.stylisheffects.common.client.StylishEffectsClient;
 import net.fabricmc.api.ClientModInitializer;
 
 public class StylishEffectsFabricClient implements ClientModInitializer {
