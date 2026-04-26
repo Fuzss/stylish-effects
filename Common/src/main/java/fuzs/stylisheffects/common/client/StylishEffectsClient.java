@@ -1,16 +1,16 @@
-package fuzs.stylisheffects.client;
+package fuzs.stylisheffects.common.client;
 
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
-import fuzs.puzzleslib.api.client.core.v1.context.GuiLayersContext;
-import fuzs.puzzleslib.api.client.event.v1.ClientLifecycleEvents;
-import fuzs.puzzleslib.api.client.event.v1.ClientTickEvents;
-import fuzs.puzzleslib.api.client.event.v1.gui.PrepareInventoryMobEffectsCallback;
-import fuzs.puzzleslib.api.client.event.v1.gui.ScreenEvents;
-import fuzs.puzzleslib.api.client.event.v1.gui.ScreenOpeningCallback;
-import fuzs.stylisheffects.StylishEffects;
-import fuzs.stylisheffects.client.handler.EffectDurationHandler;
-import fuzs.stylisheffects.client.handler.EffectScreenHandler;
-import fuzs.stylisheffects.config.ClientConfig;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.context.GuiLayersContext;
+import fuzs.puzzleslib.common.api.client.event.v1.ClientLifecycleEvents;
+import fuzs.puzzleslib.common.api.client.event.v1.ClientTickEvents;
+import fuzs.puzzleslib.common.api.client.event.v1.gui.PrepareInventoryMobEffectsCallback;
+import fuzs.puzzleslib.common.api.client.event.v1.gui.ScreenEvents;
+import fuzs.puzzleslib.common.api.client.event.v1.gui.ScreenOpeningCallback;
+import fuzs.stylisheffects.common.StylishEffects;
+import fuzs.stylisheffects.common.client.handler.EffectDurationHandler;
+import fuzs.stylisheffects.common.client.handler.EffectScreenHandler;
+import fuzs.stylisheffects.common.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 

@@ -1,7 +1,7 @@
-package fuzs.stylisheffects.integration.jei;
+package fuzs.stylisheffects.common.integration.jei;
 
-import fuzs.stylisheffects.StylishEffects;
-import fuzs.stylisheffects.client.handler.EffectScreenHandler;
+import fuzs.stylisheffects.common.StylishEffects;
+import fuzs.stylisheffects.common.client.handler.EffectScreenHandler;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;

@@ -1,4 +1,4 @@
-package fuzs.stylisheffects.client.util;
+package fuzs.stylisheffects.common.client.util;
 
 import java.util.Locale;
 

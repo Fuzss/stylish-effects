@@ -1,10 +1,10 @@
 package fuzs.stylisheffects.neoforge.client;
 
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
-import fuzs.stylisheffects.StylishEffects;
-import fuzs.stylisheffects.client.StylishEffectsClient;
-import fuzs.stylisheffects.data.client.ModLanguageProvider;
+import fuzs.stylisheffects.common.StylishEffects;
+import fuzs.stylisheffects.common.client.StylishEffectsClient;
+import fuzs.stylisheffects.common.data.client.ModLanguageProvider;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;
 

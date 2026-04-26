@@ -1,8 +1,8 @@
-package fuzs.stylisheffects.data.client;
+package fuzs.stylisheffects.common.data.client;
 
-import fuzs.puzzleslib.api.client.data.v2.AbstractLanguageProvider;
-import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
-import fuzs.stylisheffects.client.handler.EffectScreenHandler;
+import fuzs.puzzleslib.common.api.client.data.v2.AbstractLanguageProvider;
+import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
+import fuzs.stylisheffects.common.client.handler.EffectScreenHandler;
 
 public class ModLanguageProvider extends AbstractLanguageProvider {
 
