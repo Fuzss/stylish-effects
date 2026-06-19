@@ -6,7 +6,7 @@ import com.mojang.datafixers.util.Either;
 import fuzs.stylisheffects.common.StylishEffects;
 import fuzs.stylisheffects.common.config.BarPosition;
 import fuzs.stylisheffects.common.config.WidgetType;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -34,7 +34,7 @@ public abstract class GuiMobEffectRenderer extends AbstractMobEffectRenderer {
                     .put(BarPosition.LEFT, StylishEffects.id("hud/effect_background_overlay_left"))
                     .build());
 
-    public GuiMobEffectRenderer(Either<Gui, AbstractContainerScreen<?>> environment) {
+    public GuiMobEffectRenderer(Either<Hud, AbstractContainerScreen<?>> environment) {
         super(environment);
     }
 
@@ -147,14 +147,14 @@ public abstract class GuiMobEffectRenderer extends AbstractMobEffectRenderer {
 
     public static class Small extends GuiMobEffectRenderer {
 
-        public Small(Either<Gui, AbstractContainerScreen<?>> environment) {
+        public Small(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
         }
     }
 
     public static class Large extends GuiMobEffectRenderer {
 
-        public Large(Either<Gui, AbstractContainerScreen<?>> environment) {
+        public Large(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
         }
 

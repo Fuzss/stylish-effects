@@ -44,9 +44,9 @@ public class EffectScreenHandler {
     public static void rebuildGuiRenderer(Minecraft minecraft) {
         // This can be null when the Minecraft class is not yet fully initialized.
         if (minecraft.gui != null) {
-            WidgetType widgetType = StylishEffects.CONFIG.get(ClientConfig.class).guiWidgets.widgetType;
+            WidgetType widgetType = StylishEffects.CONFIG.get(ClientConfig.class).hudWidgets.widgetType;
             if (widgetType != WidgetType.NONE) {
-                guiMobEffectRenderer = widgetType.factory.apply(Either.left(minecraft.gui));
+                guiMobEffectRenderer = widgetType.factory.apply(Either.left(minecraft.gui.hud));
             } else {
                 guiMobEffectRenderer = null;
             }
@@ -55,7 +55,7 @@ public class EffectScreenHandler {
 
     public static void renderStatusEffects(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (guiMobEffectRenderer != null && !isScreenWithEffectsInInventory(minecraft.screen)) {
+        if (guiMobEffectRenderer != null && !isScreenWithEffectsInInventory(minecraft.gui.screen())) {
             List<MobEffectInstance> mobEffects = guiMobEffectRenderer.getMobEffects(minecraft.player);
             if (!mobEffects.isEmpty()) {
                 guiMobEffectRenderer.init();
@@ -67,13 +67,13 @@ public class EffectScreenHandler {
     public static void onAfterInit(AbstractContainerScreen<?> screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
         // This ensures the init method was called for the current screen via Minecraft::setScreen.
         // When opening the creative mode inventory, there always is a trailing init call for the survival inventory that messes this up otherwise.
-        if (screen == screen.minecraft.screen) {
+        if (screen == screen.minecraft.gui.screen()) {
             inventoryMobEffectRenderer = createInventoryRenderer(screen);
         }
     }
 
     public static void onRemove(AbstractContainerScreen<?> screen) {
-        if (screen == screen.minecraft.screen) {
+        if (screen == screen.minecraft.gui.screen()) {
             inventoryMobEffectRenderer = null;
         }
     }
@@ -160,7 +160,7 @@ public class EffectScreenHandler {
             MenuType<?> menuType = abstractContainerScreen.getMenu().menuType;
             if (menuType != null) {
                 Component component = Component.literal(BuiltInRegistries.MENU.getKey(menuType).toString());
-                abstractContainerScreen.minecraft.gui.getChat()
+                abstractContainerScreen.minecraft.gui.hud.getChat()
                         .addClientSystemMessage(Component.translatable(KEY_DEBUG_MENU_TYPE,
                                 ComponentUtils.wrapInSquareBrackets(component)));
             }

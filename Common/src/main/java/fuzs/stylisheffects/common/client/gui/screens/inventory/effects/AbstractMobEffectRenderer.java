@@ -15,10 +15,7 @@ import fuzs.stylisheffects.common.services.ClientAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ActiveTextCollector;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -53,17 +50,17 @@ public abstract class AbstractMobEffectRenderer {
             StylishEffects.id("number/eight"),
             StylishEffects.id("number/nine"));
 
-    protected Either<Gui, AbstractContainerScreen<?>> environment;
+    protected Either<Hud, AbstractContainerScreen<?>> environment;
     protected final ClientConfig.EffectWidgetsConfig config;
     private int screenWidth;
     private int screenHeight;
     private int startX;
     private int startY;
 
-    protected AbstractMobEffectRenderer(Either<Gui, AbstractContainerScreen<?>> environment) {
+    protected AbstractMobEffectRenderer(Either<Hud, AbstractContainerScreen<?>> environment) {
         this.environment = environment;
-        this.config = this.environment.map((Gui gui) -> {
-            return StylishEffects.CONFIG.get(ClientConfig.class).guiWidgets;
+        this.config = this.environment.map((Hud hud) -> {
+            return StylishEffects.CONFIG.get(ClientConfig.class).hudWidgets;
         }, (AbstractContainerScreen<?> screen) -> {
             return StylishEffects.CONFIG.get(ClientConfig.class).inventoryWidgets;
         });
@@ -71,14 +68,14 @@ public abstract class AbstractMobEffectRenderer {
     }
 
     public void init() {
-        this.environment.ifLeft(this::initGui).ifRight(this::initScreen);
+        this.environment.ifLeft(this::initHud).ifRight(this::initScreen);
     }
 
-    private void initGui(Gui gui) {
-        this.screenWidth = gui.minecraft.getWindow().getGuiScaledWidth() - this.config.horizontalOffset() * 2;
-        this.screenHeight = gui.minecraft.getWindow().getGuiScaledHeight() - this.config.verticalOffset() * 2;
+    private void initHud(Hud hud) {
+        this.screenWidth = hud.minecraft.getWindow().getGuiScaledWidth() - this.config.horizontalOffset() * 2;
+        this.screenHeight = hud.minecraft.getWindow().getGuiScaledHeight() - this.config.verticalOffset() * 2;
         this.startX = this.config.effectPositions.screenSide.isRight() ?
-                gui.minecraft.getWindow().getGuiScaledWidth() - this.config.horizontalOffset() :
+                hud.minecraft.getWindow().getGuiScaledWidth() - this.config.horizontalOffset() :
                 this.config.horizontalOffset();
         this.startY = this.config.verticalOffset();
     }
@@ -103,7 +100,7 @@ public abstract class AbstractMobEffectRenderer {
         } else if (!mobEffect.showIcon() && !this.config.ignoreHideParticles) {
             return false;
         } else {
-            return this.environment.map((Gui gui) -> {
+            return this.environment.map((Hud hud) -> {
                 return ScreenHelper.isEffectVisibleInGui(mobEffect);
             }, (AbstractContainerScreen<?> screen) -> {
                 return ScreenHelper.isEffectVisibleInInventory(mobEffect);
@@ -150,7 +147,7 @@ public abstract class AbstractMobEffectRenderer {
     protected abstract int getAmplifierOffsetY();
 
     protected ScreenSide getScreenSide() {
-        return this.environment.map((Gui gui) -> {
+        return this.environment.map((Hud hud) -> {
             return this.config.effectPositions.screenSide.flip();
         }, (AbstractContainerScreen<?> screen) -> {
             return this.config.effectPositions.screenSide;
@@ -332,7 +329,7 @@ public abstract class AbstractMobEffectRenderer {
     protected void renderSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         float blinkingAlpha = this.config.blinkingSprite ? this.getBlinkingAlpha(mobEffect) : 1.0F;
         int colorValue = ARGB.white(blinkingAlpha * (float) this.config.widgetTransparency);
-        Identifier mobEffectSprite = Gui.getMobEffectSprite(mobEffect.getEffect());
+        Identifier mobEffectSprite = Hud.getMobEffectSprite(mobEffect.getEffect());
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
                 mobEffectSprite,
                 posX + this.getSpriteOffsetX(),
@@ -343,9 +340,9 @@ public abstract class AbstractMobEffectRenderer {
     }
 
     private boolean renderCustomSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
-        return this.environment.map((Gui gui) -> {
+        return this.environment.map((Hud hud) -> {
             return ClientAbstractions.INSTANCE.renderGuiIcon(mobEffect,
-                    gui,
+                    hud,
                     guiGraphics,
                     posX,
                     posY,
@@ -450,7 +447,7 @@ public abstract class AbstractMobEffectRenderer {
 
     public Optional<List<Component>> getHoveredEffectTooltip(int mouseX, int mouseY, List<MobEffectInstance> mobEffects) {
         if (this.config.hoveringTooltip()) {
-            return this.environment.map((Gui gui) -> {
+            return this.environment.map((Hud hud) -> {
                 return Optional.empty();
             }, (AbstractContainerScreen<?> screen) -> {
                 return this.getHoveredEffect(mouseX, mouseY, mobEffects).map((MobEffectInstance mobEffect) -> {

@@ -42,7 +42,7 @@ public class EffectDurationHandler {
     }
 
     public static void onStartClientTick(Minecraft minecraft) {
-        if (!StylishEffects.CONFIG.get(ClientConfig.class).guiWidgets.effectBar.effectBar && !StylishEffects.CONFIG.get(
+        if (!StylishEffects.CONFIG.get(ClientConfig.class).hudWidgets.effectBar.effectBar && !StylishEffects.CONFIG.get(
                 ClientConfig.class).inventoryWidgets.effectBar.effectBar) {
             return;
         }

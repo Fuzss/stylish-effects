@@ -11,8 +11,8 @@ import fuzs.stylisheffects.common.services.ClientAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
@@ -34,7 +34,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
                     .put(BarPosition.LEFT, StylishEffects.id("container/inventory/effect_background_overlay_left"))
                     .build());
 
-    public InventoryMobEffectRenderer(Either<Gui, AbstractContainerScreen<?>> environment) {
+    public InventoryMobEffectRenderer(Either<Hud, AbstractContainerScreen<?>> environment) {
         super(environment);
     }
 
@@ -85,7 +85,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
 
     public static class Small extends InventoryMobEffectRenderer {
 
-        public Small(Either<Gui, AbstractContainerScreen<?>> environment) {
+        public Small(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
         }
 
@@ -102,7 +102,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
 
     public static class Large extends InventoryMobEffectRenderer {
 
-        public Large(Either<Gui, AbstractContainerScreen<?>> environment) {
+        public Large(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
         }
 

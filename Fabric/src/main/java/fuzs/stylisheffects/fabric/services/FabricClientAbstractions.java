@@ -2,8 +2,8 @@ package fuzs.stylisheffects.fabric.services;
 
 import fuzs.puzzleslib.fabric.api.client.event.v1.FabricGuiEvents;
 import fuzs.stylisheffects.common.services.ClientAbstractions;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -23,7 +23,7 @@ public final class FabricClientAbstractions implements ClientAbstractions {
     }
 
     @Override
-    public boolean renderGuiIcon(MobEffectInstance mobEffect, Gui gui, GuiGraphicsExtractor guiGraphics, int x, int y, float z, float alpha) {
+    public boolean renderGuiIcon(MobEffectInstance mobEffect, Hud hud, GuiGraphicsExtractor guiGraphics, int x, int y, float z, float alpha) {
         return false;
     }
 

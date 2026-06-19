@@ -5,6 +5,7 @@ import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractM
 import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.GuiMobEffectRenderer;
 import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.InventoryMobEffectRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
 import java.util.function.Function;
@@ -16,7 +17,7 @@ public enum WidgetType {
     /**
      * nothing is rendered
      */
-    NONE((Either<Gui, AbstractContainerScreen<?>> either) -> {
+    NONE((Either<Hud, AbstractContainerScreen<?>> either) -> {
         throw new IllegalStateException("Cannot create effect renderer");
     }),
     /**
@@ -43,7 +44,7 @@ public enum WidgetType {
     }
 
     @FunctionalInterface
-    public interface Factory extends Function<Either<Gui, AbstractContainerScreen<?>>, AbstractMobEffectRenderer> {
+    public interface Factory extends Function<Either<Hud, AbstractContainerScreen<?>>, AbstractMobEffectRenderer> {
 
     }
 }

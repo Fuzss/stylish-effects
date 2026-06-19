@@ -20,7 +20,7 @@ public class ClientConfig implements ConfigCore {
     @Config
     public final InventoryWidgetsConfig inventoryWidgets = new InventoryWidgetsConfig();
     @Config
-    public final GuiWidgetsConfig guiWidgets = new GuiWidgetsConfig();
+    public final HudWidgetsConfig hudWidgets = new HudWidgetsConfig();
 
     public static abstract class EffectWidgetsConfig implements ConfigCore {
         @Config
@@ -114,7 +114,7 @@ public class ClientConfig implements ConfigCore {
         }
     }
 
-    public static class GuiWidgetsConfig extends EffectWidgetsConfig {
+    public static class HudWidgetsConfig extends EffectWidgetsConfig {
         @Config(description = "Horizontal offset on x-axis.")
         @Config.IntRange(min = 0)
         public int horizontalOffset = 3;
@@ -124,7 +124,7 @@ public class ClientConfig implements ConfigCore {
         @Config(description = "Draw harmful effects on a separate line from beneficial ones. This is turned on in vanilla.")
         public boolean separateEffects = false;
 
-        public GuiWidgetsConfig() {
+        public HudWidgetsConfig() {
             this.effectDuration.ambientDuration = false;
             this.effectPositions.screenSide = ScreenSide.RIGHT;
             this.widgetTransparency = 0.85;

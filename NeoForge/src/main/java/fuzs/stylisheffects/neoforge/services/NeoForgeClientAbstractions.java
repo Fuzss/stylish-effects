@@ -1,8 +1,8 @@
 package fuzs.stylisheffects.neoforge.services;
 
 import fuzs.stylisheffects.common.services.ClientAbstractions;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -27,9 +27,9 @@ public final class NeoForgeClientAbstractions implements ClientAbstractions {
     }
 
     @Override
-    public boolean renderGuiIcon(MobEffectInstance mobEffect, Gui gui, GuiGraphicsExtractor guiGraphics, int x, int y, float z, float alpha) {
+    public boolean renderGuiIcon(MobEffectInstance mobEffect, Hud hud, GuiGraphicsExtractor guiGraphics, int x, int y, float z, float alpha) {
         return IClientMobEffectExtensions.of(mobEffect)
-                .renderGuiIcon(mobEffect, gui, guiGraphics, x, y, z, alpha);
+                .renderGuiIcon(mobEffect, hud, guiGraphics, x, y, z, alpha);
     }
 
     @Override
