@@ -8,7 +8,7 @@ plugins {
 dependencies {
     modApi(sharedLibs.fabricapi.fabric)
     modApi(sharedLibs.puzzleslib.fabric)
-//    modCompileOnly(sharedLibs.jeiapi.common)
+    modCompileOnly(sharedLibs.jeiapi.common)
 //    modLocalRuntime(sharedLibs.jei.fabric)
     modCompileOnly(sharedLibs.bundles.reiapi.fabric)
     modCompileOnly(sharedLibs.reidefaultplugin.fabric)
@@ -18,10 +18,10 @@ dependencies {
 multiloader {
     modFile {
         json {
-//            entrypoint(
-//                "jei_mod_plugin",
-//                "${project.group}.${project.commonProject.packageName}.integration.jei.StylishEffectsJeiPlugin"
-//            )
+            entrypoint(
+                "jei_mod_plugin",
+                "${project.group}.${project.commonProject.packageName}.integration.jei.StylishEffectsJeiPlugin"
+            )
             entrypoint(
                 "rei_client",
                 "${project.group}.${project.commonProject.packageName}.integration.rei.StylishEffectsReiPlugin"
