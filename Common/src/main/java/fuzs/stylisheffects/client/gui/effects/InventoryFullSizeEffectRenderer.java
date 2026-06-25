@@ -78,7 +78,7 @@ public class InventoryFullSizeEffectRenderer extends AbstractEffectRenderer {
             int maxX = posX + this.getWidth() - 7;
             int alpha = (int) (this.rendererConfig().widgetAlpha * 255.0F) << 24;
             guiGraphics.drawString(minecraft.font, this.processEffectDisplayName(minecraft.font, component, maxX - minX),
-                    minX, posY + 6 + (!this.widgetConfig().ambientDuration && mobEffect.isAmbient() ? 4 : 0), alpha | nameColor, false);
+                    minX, posY + 7 + (!this.widgetConfig().ambientDuration && mobEffect.isAmbient() ? 4 : 0), alpha | nameColor, false);
             if (this.widgetConfig().ambientDuration || !mobEffect.isAmbient()) {
                 this.getEffectDuration(mobEffect).ifPresent(duration -> {
                     int durationColor = ColorUtil.getEffectColor(this.widgetConfig().durationColor, mobEffect);
