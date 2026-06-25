@@ -270,10 +270,10 @@ public abstract class AbstractEffectRenderer implements EffectWidget, RenderArea
         return false;
     }
 
-    protected void drawEffectText(GuiGraphics guiGraphics, int posX, int posY, Minecraft minecraft, MobEffectInstance mobEffectInstance) {
-        if (!this.widgetConfig().ambientDuration && mobEffectInstance.isAmbient()) return;
-        this.getEffectDuration(mobEffectInstance).ifPresent(durationComponent -> {
-            int potionColor = ColorUtil.getEffectColor(this.widgetConfig().durationColor, mobEffectInstance);
+    protected void drawEffectText(GuiGraphics guiGraphics, int posX, int posY, Minecraft minecraft, MobEffectInstance mobEffect) {
+        if (!this.widgetConfig().ambientDuration && mobEffect.isAmbient()) return;
+        this.getEffectDuration(mobEffect).ifPresent(durationComponent -> {
+            int potionColor = ColorUtil.getEffectColor(this.widgetConfig().durationColor, mobEffect);
             int alpha = (int) (this.rendererConfig().widgetAlpha * 255.0F) << 24;
             FormattedCharSequence text = durationComponent.getVisualOrderText();
             // render shadow on every side to avoid clashing with colorful background
@@ -307,7 +307,7 @@ public abstract class AbstractEffectRenderer implements EffectWidget, RenderArea
         }
         return Optional.of(Component.literal(this.formatEffectDuration(mobEffectInstance)));
     }
-    
+
     @Nullable
     protected String getInfiniteDurationString() {
         return "\u221e";
@@ -398,12 +398,16 @@ public abstract class AbstractEffectRenderer implements EffectWidget, RenderArea
         return tooltip;
     }
 
-    protected MutableComponent getEffectDisplayName(MobEffectInstance mobEffectInstance) {
-        MutableComponent textComponent = Component.empty().append(mobEffectInstance.getEffect().getDisplayName());
-        String translationKey = "enchantment.level." + (mobEffectInstance.getAmplifier() + 1);
-        if (mobEffectInstance.getAmplifier() >= 1 && mobEffectInstance.getAmplifier() <= 9 || Language.getInstance().has(translationKey)) {
-            textComponent.append(" ").append(Component.translatable(translationKey));
+    protected MutableComponent getEffectDisplayName(MobEffectInstance mobEffect) {
+        MutableComponent component = mobEffect.getEffect().getDisplayName().copy();
+        String translationKey = "potion.potency." + mobEffect.getAmplifier();
+        // Potion amplifier translations are shifted, meaning 1 -> II, 2 -> III, etc.
+        // Also, support mods or resource packs that localize roman numerals above VI.
+        if (mobEffect.getAmplifier() > 0 && (mobEffect.getAmplifier() <= 5 || Language.getInstance()
+                .has(translationKey))) {
+            return component.append(CommonComponents.SPACE).append(Component.translatable(translationKey));
+        } else {
+            return component;
         }
-        return textComponent;
     }
 }
