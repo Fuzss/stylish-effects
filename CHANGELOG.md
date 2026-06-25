@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix text peaking through layered widgets for the large-sized inventory renderer
+- Fix long effect names overflowing the inventory effect widget backgrounds
+- Fix effect amplifiers always showing as one more compared to vanilla
 
 ## [v8.0.2-1.20.1] - 2024-02-10
 
