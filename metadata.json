@@ -4,7 +4,7 @@
         "id": "stylisheffects",
         "group": "fuzs.stylisheffects",
         "name": "Stylish Effects",
-        "version": "26.2.1",
+        "version": "26.2.2",
         "authors": [
             "Fuzs"
         ],
@@ -12,22 +12,6 @@
         "license": "MPL-2.0"
     },
     "dependencies": [
-        {
-            "name": "jei",
-            "type": "optional",
-            "platforms": [
-                "fabric",
-                "neoforge"
-            ]
-        },
-        {
-            "name": "rei",
-            "type": "optional",
-            "platforms": [
-                "fabric",
-                "neoforge"
-            ]
-        },
         {
             "name": "fabricapi",
             "type": "required",
@@ -43,8 +27,24 @@
             ]
         },
         {
+            "name": "jei",
+            "type": "optional",
+            "platforms": [
+                "fabric",
+                "neoforge"
+            ]
+        },
+        {
             "name": "puzzleslib",
             "type": "required",
+            "platforms": [
+                "fabric",
+                "neoforge"
+            ]
+        },
+        {
+            "name": "rei",
+            "type": "optional",
             "platforms": [
                 "fabric",
                 "neoforge"
