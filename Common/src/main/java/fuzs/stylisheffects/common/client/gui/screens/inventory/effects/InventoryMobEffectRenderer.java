@@ -17,6 +17,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -91,7 +92,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
 
         @Override
         protected int getSpriteOffsetY(boolean withoutDuration) {
-            return withoutDuration ? super.getSpriteOffsetY(withoutDuration) : 6;
+            return withoutDuration ? super.getSpriteOffsetY(true) : 6;
         }
 
         @Override
@@ -124,47 +125,50 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
         @Override
         protected void renderLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
             if (!this.renderCustomLabels(guiGraphics, posX, posY, mobEffect)) {
-                Font font = Minecraft.getInstance().font;
-                Component displayNameComponent = this.getEffectDisplayName(mobEffect, false);
-                Style displayNameStyle = this.config.nameColor.getMobEffectStyle(mobEffect);
                 int minX = posX + 12 + 18;
                 int maxX = posX + this.getWidth() - 7;
-                Component durationComponent = this.getEffectDuration(mobEffect, maxX - minX);
-                int minY = posY + 6 + (durationComponent == null ? 4 : 0);
-                int maxY = minY + font.lineHeight;
+                Component component = this.getEffectDuration(mobEffect, maxX - minX);
+                int minY = posY + 6 + (component == null ? 4 : 0);
+                int maxY = minY + Minecraft.getInstance().font.lineHeight;
                 ActiveTextCollector activeTextCollector = this.activeTextCollector(guiGraphics);
-                int displayNameComponentWidth = font.width(displayNameComponent);
-                if (displayNameComponentWidth > maxX - minX) {
-                    // The scissor area is messed up when the scale is smaller than one; might be a vanilla bug.
-                    // So, we work around that by just adding an ellipsis.
-                    if (this.getWidgetScale() < 1.0F) {
-                        FormattedText formattedText = font.substrByWidth(displayNameComponent,
-                                displayNameComponentWidth - font.width(CommonComponents.ELLIPSIS));
-                        displayNameComponent = ComponentHelper.getAsComponent(formattedText);
-                        activeTextCollector.accept(minX,
-                                minY + 1,
-                                Component.empty()
-                                        .append(displayNameComponent)
-                                        .append(CommonComponents.ELLIPSIS)
-                                        .setStyle(displayNameStyle));
-                    } else {
-                        activeTextCollector.acceptScrollingWithDefaultCenter(ComponentUtils.mergeStyles(
-                                displayNameComponent,
-                                displayNameStyle), minX, maxX, minY, maxY);
-                    }
-                } else {
-                    // The text renderer defaults to centering in the middle when the text fits; we do not want that.
+                this.extractDisplayName(activeTextCollector, mobEffect, minX, maxX, minY, maxY);
+                this.extractDuration(activeTextCollector, mobEffect, component, minX, minY);
+            }
+        }
+
+        private void extractDisplayName(ActiveTextCollector activeTextCollector, MobEffectInstance mobEffect, int minX, int maxX, int minY, int maxY) {
+            Font font = Minecraft.getInstance().font;
+            Component component = this.getEffectDisplayName(mobEffect, false);
+            Style style = this.config.nameColor.getMobEffectStyle(mobEffect);
+            int width = font.width(component);
+            int maxWidth = maxX - minX;
+            if (width > maxWidth) {
+                // The scissor area is messed up when the scale is smaller than one; might be a vanilla bug.
+                // So, we work around that by just adding an ellipsis.
+                if (this.getWidgetScale() < 1.0F) {
+                    FormattedText formattedText = font.substrByWidth(component,
+                            maxWidth - font.width(CommonComponents.ELLIPSIS));
+                    component = ComponentHelper.getAsComponent(formattedText);
                     activeTextCollector.accept(minX,
                             minY + 1,
-                            ComponentUtils.mergeStyles(displayNameComponent, displayNameStyle));
+                            Component.empty().append(component).append(CommonComponents.ELLIPSIS).setStyle(style));
+                } else {
+                    activeTextCollector.acceptScrollingWithDefaultCenter(ComponentUtils.mergeStyles(component, style),
+                            minX,
+                            maxX,
+                            minY,
+                            maxY);
                 }
+            } else {
+                // The text renderer defaults to centering in the middle when the text fits; we do not want that.
+                activeTextCollector.accept(minX, minY + 1, ComponentUtils.mergeStyles(component, style));
+            }
+        }
 
-                if (durationComponent != null) {
-                    Style durationStyle = this.config.effectDuration.durationColor.getMobEffectStyle(mobEffect);
-                    activeTextCollector.accept(minX,
-                            minY + 1 + 11,
-                            ComponentUtils.mergeStyles(durationComponent, durationStyle));
-                }
+        private void extractDuration(ActiveTextCollector activeTextCollector, MobEffectInstance mobEffect, @Nullable Component component, int posX, int posY) {
+            if (component != null) {
+                Style durationStyle = this.config.effectDuration.durationColor.getMobEffectStyle(mobEffect);
+                activeTextCollector.accept(posX, posY + 1 + 11, ComponentUtils.mergeStyles(component, durationStyle));
             }
         }
 
