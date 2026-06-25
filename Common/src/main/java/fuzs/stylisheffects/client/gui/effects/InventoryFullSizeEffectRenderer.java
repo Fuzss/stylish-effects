@@ -1,5 +1,6 @@
 package fuzs.stylisheffects.client.gui.effects;
 
+import fuzs.puzzleslib.api.chat.v1.ComponentHelper;
 import fuzs.stylisheffects.StylishEffects;
 import fuzs.stylisheffects.api.v1.client.MobEffectWidgetContext;
 import fuzs.stylisheffects.services.ClientAbstractions;
@@ -7,9 +8,12 @@ import fuzs.stylisheffects.client.handler.EffectRendererEnvironment;
 import fuzs.stylisheffects.client.util.ColorUtil;
 import fuzs.stylisheffects.config.ClientConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.effect.MobEffectInstance;
 
 public class InventoryFullSizeEffectRenderer extends AbstractEffectRenderer {
@@ -64,18 +68,35 @@ public class InventoryFullSizeEffectRenderer extends AbstractEffectRenderer {
     }
 
     @Override
-    protected void drawEffectText(GuiGraphics guiGraphics, int posX, int posY, Minecraft minecraft, MobEffectInstance effectinstance) {
+    protected void drawEffectText(GuiGraphics guiGraphics, int posX, int posY, Minecraft minecraft, MobEffectInstance mobEffect) {
         // disable font shadows, they force text to render on top above everything else, which breaks the widget layering
-        if (!(this.screen instanceof EffectRenderingInventoryScreen<?> effectInventoryScreen) || !ClientAbstractions.INSTANCE.renderInventoryText(effectinstance, effectInventoryScreen, guiGraphics, posX, posY, 0)) {
-            MutableComponent component = this.getEffectDisplayName(effectinstance);
-            int nameColor = ColorUtil.getEffectColor(this.widgetConfig().nameColor, effectinstance);
-            guiGraphics.drawString(minecraft.font, component, posX + 12 + 18, posY + 7 + (!this.widgetConfig().ambientDuration && effectinstance.isAmbient() ? 4 : 0), (int) (this.rendererConfig().widgetAlpha * 255.0F) << 24 | nameColor, false);
-            if (this.widgetConfig().ambientDuration || !effectinstance.isAmbient()) {
-                this.getEffectDuration(effectinstance).ifPresent(duration -> {
-                    int durationColor = ColorUtil.getEffectColor(this.widgetConfig().durationColor, effectinstance);
-                    guiGraphics.drawString(minecraft.font, duration, posX + 12 + 18, posY + 7 + 11, (int) (this.rendererConfig().widgetAlpha * 255.0F) << 24 | durationColor, false);
+        if (!(this.screen instanceof EffectRenderingInventoryScreen<?> effectInventoryScreen) || !ClientAbstractions.INSTANCE.renderInventoryText(
+                mobEffect, effectInventoryScreen, guiGraphics, posX, posY, 0)) {
+            Component component = this.getEffectDisplayName(mobEffect);
+            int nameColor = ColorUtil.getEffectColor(this.widgetConfig().nameColor, mobEffect);
+            int minX = posX + 12 + 18;
+            int maxX = posX + this.getWidth() - 7;
+            int alpha = (int) (this.rendererConfig().widgetAlpha * 255.0F) << 24;
+            guiGraphics.drawString(minecraft.font, this.processEffectDisplayName(minecraft.font, component, maxX - minX),
+                    minX, posY + 6 + (!this.widgetConfig().ambientDuration && mobEffect.isAmbient() ? 4 : 0), alpha | nameColor, false);
+            if (this.widgetConfig().ambientDuration || !mobEffect.isAmbient()) {
+                this.getEffectDuration(mobEffect).ifPresent(duration -> {
+                    int durationColor = ColorUtil.getEffectColor(this.widgetConfig().durationColor, mobEffect);
+                    guiGraphics.drawString(minecraft.font, duration,
+                            minX, posY + 7 + 11, alpha | durationColor, false);
                 });
             }
+        }
+    }
+
+    private Component processEffectDisplayName(Font font, Component component, int maxWidth) {
+        int width = font.width(component);
+        if (width > maxWidth) {
+            FormattedText formattedText = font.substrByWidth(component,
+                    maxWidth - font.width(CommonComponents.ELLIPSIS));
+            return ComponentHelper.toComponent(formattedText).copy().append(CommonComponents.ELLIPSIS);
+        } else {
+            return component;
         }
     }
 
