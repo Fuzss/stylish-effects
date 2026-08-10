@@ -5,8 +5,8 @@ import fuzs.stylisheffects.common.client.handler.EffectScreenHandler;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
-import mezz.jei.api.registration.IAdvancedRegistration;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
+import mezz.jei.api.runtime.IJeiFeatures;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.Identifier;
@@ -32,7 +32,7 @@ public class StylishEffectsJeiPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerAdvanced(IAdvancedRegistration registration) {
-        registration.getJeiFeatures().disableInventoryEffectRendererGuiHandler();
+    public void configureJei(IJeiFeatures jeiFeatures) {
+        jeiFeatures.disableInventoryEffectRendererGuiHandler();
     }
 }
