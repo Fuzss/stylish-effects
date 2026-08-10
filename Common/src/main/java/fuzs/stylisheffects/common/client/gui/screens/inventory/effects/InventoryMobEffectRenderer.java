@@ -16,6 +16,7 @@ import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.CommonColors;
 import net.minecraft.world.effect.MobEffectInstance;
 import org.jspecify.annotations.Nullable;
 
@@ -124,9 +125,9 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
 
         @Override
         protected void renderLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
-            if (!this.renderCustomLabels(guiGraphics, posX, posY, mobEffect)) {
-                int minX = posX + 12 + 18;
-                int maxX = posX + this.getWidth() - 7;
+            int minX = posX + 12 + 18;
+            int maxX = posX + this.getWidth() - 7;
+            if (!this.renderCustomLabels(guiGraphics, posX, posY, mobEffect, maxX - minX)) {
                 Component component = this.getEffectDuration(mobEffect, maxX - minX);
                 int minY = posY + 6 + (component == null ? 4 : 0);
                 int maxY = minY + Minecraft.getInstance().font.lineHeight;
@@ -172,9 +173,15 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
             }
         }
 
-        protected boolean renderCustomLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        protected boolean renderCustomLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect, int width) {
             return this.environment.right().map((AbstractContainerScreen<?> screen) -> {
-                return ClientAbstractions.INSTANCE.renderInventoryText(mobEffect, screen, guiGraphics, posX, posY, 0);
+                return ClientAbstractions.INSTANCE.extractInventoryText(mobEffect,
+                        screen,
+                        guiGraphics,
+                        posX,
+                        posY,
+                        width,
+                        CommonColors.WHITE);
             }).orElse(Boolean.FALSE);
         }
     }

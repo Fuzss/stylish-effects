@@ -13,23 +13,22 @@ import net.neoforged.neoforge.common.NeoForge;
 import java.util.List;
 
 public final class NeoForgeClientAbstractions implements ClientAbstractions {
-
     @Override
-    public boolean renderInventoryText(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int blitOffset) {
+    public boolean extractInventoryText(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int width, int color) {
         return IClientMobEffectExtensions.of(mobEffect)
-                .renderInventoryText(mobEffect, screen, guiGraphics, x, y, blitOffset);
+                .extractInventoryText(mobEffect, screen, guiGraphics, x, y, width, color);
     }
 
     @Override
-    public boolean renderInventoryIcon(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int blitOffset) {
+    public boolean extractInventoryIcon(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int color) {
         return IClientMobEffectExtensions.of(mobEffect)
-                .renderInventoryIcon(mobEffect, screen, guiGraphics, x, y, blitOffset);
+                .extractInventoryIcon(mobEffect, screen, guiGraphics, x, y, width, height, color);
     }
 
     @Override
-    public boolean renderGuiIcon(MobEffectInstance mobEffect, Hud hud, GuiGraphicsExtractor guiGraphics, int x, int y, float z, float alpha) {
+    public boolean extractHudIcon(MobEffectInstance mobEffect, Hud hud, GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int color) {
         return IClientMobEffectExtensions.of(mobEffect)
-                .renderGuiIcon(mobEffect, hud, guiGraphics, x, y, z, alpha);
+                .extractHudIcon(mobEffect, hud, guiGraphics, x, y, width, height, color);
     }
 
     @Override

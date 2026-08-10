@@ -12,11 +12,11 @@ import java.util.List;
 public interface ClientAbstractions {
     ClientAbstractions INSTANCE = ServiceProviderHelper.load(ClientAbstractions.class);
 
-    boolean renderInventoryText(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int blitOffset);
+    boolean extractInventoryText(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int width, int color);
 
-    boolean renderInventoryIcon(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int blitOffset);
+    boolean extractInventoryIcon(MobEffectInstance mobEffect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int color);
 
-    boolean renderGuiIcon(MobEffectInstance mobEffect, Hud hud, GuiGraphicsExtractor guiGraphics, int x, int y, float z, float alpha);
+    boolean extractHudIcon(MobEffectInstance mobEffect, Hud hud, GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int color);
 
     void onGatherEffectScreenTooltip(AbstractContainerScreen<?> screen, MobEffectInstance mobEffect, List<Component> tooltipLines);
 }

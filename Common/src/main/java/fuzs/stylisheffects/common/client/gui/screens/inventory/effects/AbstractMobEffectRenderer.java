@@ -280,10 +280,7 @@ public abstract class AbstractMobEffectRenderer {
 
     protected void renderContents(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         this.renderBackground(guiGraphics, posX, posY, mobEffect);
-        if (!this.renderCustomSprite(guiGraphics, posX, posY, mobEffect)) {
-            this.renderSprite(guiGraphics, posX, posY, mobEffect);
-        }
-
+        this.renderSprite(guiGraphics, posX, posY, mobEffect);
         this.renderLabels(guiGraphics, posX, posY, mobEffect);
         if (this.config.effectAmplifier.effectAmplifier) {
             this.renderForeground(guiGraphics, posX, posY, mobEffect);
@@ -330,29 +327,41 @@ public abstract class AbstractMobEffectRenderer {
     protected abstract Identifier getEffectBarSprite(BarPosition barPosition);
 
     protected void renderSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        int spriteX = posX + this.getSpriteOffsetX();
+        int spriteY = posY + this.getSpriteOffsetY(this.getEffectDuration(mobEffect, -1) == null);
         float blinkingAlpha = this.config.blinkingSprite ? this.getBlinkingAlpha(mobEffect) : 1.0F;
-        int colorValue = ARGB.white(blinkingAlpha * (float) this.config.widgetTransparency);
-        Identifier mobEffectSprite = Hud.getMobEffectSprite(mobEffect.getEffect());
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
-                mobEffectSprite,
-                posX + this.getSpriteOffsetX(),
-                posY + this.getSpriteOffsetY(this.getEffectDuration(mobEffect, -1) == null),
-                MOB_EFFECT_SPRITE_SIZE,
-                MOB_EFFECT_SPRITE_SIZE,
-                colorValue);
+        int color = ARGB.white(blinkingAlpha * (float) this.config.widgetTransparency);
+        if (!this.renderCustomSprite(guiGraphics, spriteX, spriteY, mobEffect, color)) {
+            Identifier sprite = Hud.getMobEffectSprite(mobEffect.getEffect());
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
+                    sprite,
+                    spriteX,
+                    spriteY,
+                    MOB_EFFECT_SPRITE_SIZE,
+                    MOB_EFFECT_SPRITE_SIZE,
+                    color);
+        }
     }
 
-    private boolean renderCustomSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    private boolean renderCustomSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect, int color) {
         return this.environment.map((Hud hud) -> {
-            return ClientAbstractions.INSTANCE.renderGuiIcon(mobEffect,
+            return ClientAbstractions.INSTANCE.extractHudIcon(mobEffect,
                     hud,
                     guiGraphics,
                     posX,
                     posY,
-                    0,
-                    this.getBlinkingAlpha(mobEffect) * (float) this.config.widgetTransparency);
+                    MOB_EFFECT_SPRITE_SIZE,
+                    MOB_EFFECT_SPRITE_SIZE,
+                    color);
         }, (AbstractContainerScreen<?> screen) -> {
-            return ClientAbstractions.INSTANCE.renderInventoryIcon(mobEffect, screen, guiGraphics, posX, posY, 0);
+            return ClientAbstractions.INSTANCE.extractInventoryIcon(mobEffect,
+                    screen,
+                    guiGraphics,
+                    posX,
+                    posY,
+                    MOB_EFFECT_SPRITE_SIZE,
+                    MOB_EFFECT_SPRITE_SIZE,
+                    color);
         });
     }
 
