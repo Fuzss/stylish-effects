@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRenderer {
+public abstract class InventoryMobEffectExtractor extends AbstractMobEffectExtractor {
     protected static final Identifier EFFECT_BACKGROUND_SPRITE = Identifier.withDefaultNamespace(
             "container/inventory/effect_background");
     protected static final Identifier EFFECT_BACKGROUND_AMBIENT_SPRITE = Identifier.withDefaultNamespace(
@@ -36,17 +36,17 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
                     .put(BarPosition.LEFT, StylishEffects.id("container/inventory/effect_background_overlay_left"))
                     .build());
 
-    public InventoryMobEffectRenderer(Either<Hud, AbstractContainerScreen<?>> environment) {
+    public InventoryMobEffectExtractor(Either<Hud, AbstractContainerScreen<?>> environment) {
         super(environment);
     }
 
     @Override
-    public int getWidth() {
+    public int getWidgetWidth() {
         return 32;
     }
 
     @Override
-    public int getHeight() {
+    public int getWidgetHeight() {
         return 32;
     }
 
@@ -72,7 +72,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
 
     @Override
     protected int getDurationOffsetY() {
-        return this.getHeight() - 13;
+        return this.getWidgetHeight() - 13;
     }
 
     @Override
@@ -85,7 +85,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
         return EFFECT_BACKGROUND_OVERLAY_SPRITES.get(barPosition);
     }
 
-    public static class Small extends InventoryMobEffectRenderer {
+    public static class Small extends InventoryMobEffectExtractor {
 
         public Small(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
@@ -98,18 +98,18 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
 
         @Override
         public WidgetType.Factory getFallbackRenderer() {
-            return GuiMobEffectRenderer.Large::new;
+            return GuiMobEffectExtractor.Large::new;
         }
     }
 
-    public static class Large extends InventoryMobEffectRenderer {
+    public static class Large extends InventoryMobEffectExtractor {
 
         public Large(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
         }
 
         @Override
-        public int getWidth() {
+        public int getWidgetWidth() {
             return 120;
         }
 
@@ -124,10 +124,10 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
         }
 
         @Override
-        protected void renderLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        protected void extractText(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
             int minX = posX + 12 + 18;
-            int maxX = posX + this.getWidth() - 7;
-            if (!this.renderCustomLabels(guiGraphics, posX, posY, mobEffect, maxX - minX)) {
+            int maxX = posX + this.getWidgetWidth() - 7;
+            if (!this.extractCustomText(guiGraphics, posX, posY, mobEffect, maxX - minX)) {
                 Component component = this.getEffectDuration(mobEffect, maxX - minX);
                 int minY = posY + 6 + (component == null ? 4 : 0);
                 int maxY = minY + Minecraft.getInstance().font.lineHeight;
@@ -173,7 +173,7 @@ public abstract class InventoryMobEffectRenderer extends AbstractMobEffectRender
             }
         }
 
-        protected boolean renderCustomLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect, int width) {
+        protected boolean extractCustomText(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect, int width) {
             return this.environment.right().map((AbstractContainerScreen<?> screen) -> {
                 return ClientAbstractions.INSTANCE.extractInventoryText(mobEffect,
                         screen,

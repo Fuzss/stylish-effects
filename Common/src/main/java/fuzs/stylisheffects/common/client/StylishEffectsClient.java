@@ -40,7 +40,7 @@ public class StylishEffectsClient implements ClientModConstructor {
     @Override
     public void onRegisterGuiLayers(GuiLayersContext context) {
         context.replaceGuiLayer(GuiLayersContext.STATUS_EFFECTS, (GuiLayersContext.Layer layer) -> {
-            return EffectScreenHandler::renderStatusEffects;
+            return EffectScreenHandler::extractStatusEffects;
         });
     }
 }

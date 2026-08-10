@@ -36,7 +36,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class AbstractMobEffectRenderer {
+public abstract class AbstractMobEffectExtractor {
     public static final float DEFAULT_WIDGET_SCALE = 4.0F;
     protected static final int MOB_EFFECT_SPRITE_SIZE = 18;
     protected static final int TINY_NUMBER_WIDTH = 3;
@@ -60,7 +60,7 @@ public abstract class AbstractMobEffectRenderer {
     private int startX;
     private int startY;
 
-    protected AbstractMobEffectRenderer(Either<Hud, AbstractContainerScreen<?>> environment) {
+    protected AbstractMobEffectExtractor(Either<Hud, AbstractContainerScreen<?>> environment) {
         this.environment = environment;
         this.config = this.environment.map((Hud hud) -> {
             return StylishEffects.CONFIG.get(ClientConfig.class).hudWidgets;
@@ -119,26 +119,26 @@ public abstract class AbstractMobEffectRenderer {
         return (float) (this.config.widgetScale / DEFAULT_WIDGET_SCALE);
     }
 
-    public abstract int getWidth();
+    public abstract int getWidgetWidth();
 
-    public abstract int getHeight();
+    public abstract int getWidgetHeight();
 
     public final int getScaledWidth() {
-        return (int) (this.getWidth() * this.getWidgetScale());
+        return (int) (this.getWidgetWidth() * this.getWidgetScale());
     }
 
     public final int getScaledHeight() {
-        return (int) (this.getHeight() * this.getWidgetScale());
+        return (int) (this.getWidgetHeight() * this.getWidgetScale());
     }
 
     protected int getSpriteOffsetX() {
-        return (this.getWidth() - MOB_EFFECT_SPRITE_SIZE) / 2;
+        return (this.getWidgetWidth() - MOB_EFFECT_SPRITE_SIZE) / 2;
     }
 
     protected abstract int getSpriteOffsetY(boolean withoutDuration);
 
     protected int getDurationOffsetX() {
-        return this.getWidth() / 2;
+        return this.getWidgetWidth() / 2;
     }
 
     protected abstract int getDurationOffsetY();
@@ -195,9 +195,9 @@ public abstract class AbstractMobEffectRenderer {
         };
     }
 
-    public void renderEffectWidgets(GuiGraphicsExtractor guiGraphics, List<MobEffectInstance> mobEffects) {
+    public void extractEffectWidgets(GuiGraphicsExtractor guiGraphics, List<MobEffectInstance> mobEffects) {
         for (Pair<MobEffectInstance, Vector2ic> entry : this.getEffectPositions(mobEffects)) {
-            this.renderWidget(guiGraphics, entry.getValue().x(), entry.getValue().y(), entry.getKey());
+            this.extractWidget(guiGraphics, entry.getValue().x(), entry.getValue().y(), entry.getKey());
         }
     }
 
@@ -265,7 +265,7 @@ public abstract class AbstractMobEffectRenderer {
         return activeTextCollector;
     }
 
-    public final void renderWidget(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    public final void extractWidget(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         guiGraphics.pose().pushMatrix();
         float scale = this.getWidgetScale();
         if (scale != 1.0F) {
@@ -274,50 +274,53 @@ public abstract class AbstractMobEffectRenderer {
             posY /= scale;
         }
 
-        this.renderContents(guiGraphics, posX, posY, mobEffect);
+        this.extractContents(guiGraphics, posX, posY, mobEffect);
         guiGraphics.pose().popMatrix();
     }
 
-    protected void renderContents(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
-        this.renderBackground(guiGraphics, posX, posY, mobEffect);
-        this.renderSprite(guiGraphics, posX, posY, mobEffect);
-        this.renderLabels(guiGraphics, posX, posY, mobEffect);
+    protected void extractContents(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        this.extractBackground(guiGraphics, posX, posY, mobEffect);
+        this.extractIcon(guiGraphics, posX, posY, mobEffect);
+        this.extractText(guiGraphics, posX, posY, mobEffect);
         if (this.config.effectAmplifier.effectAmplifier) {
-            this.renderForeground(guiGraphics, posX, posY, mobEffect);
+            this.extractForeground(guiGraphics, posX, posY, mobEffect);
         }
     }
 
-    protected void renderBackground(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
-        Identifier backgroundSprite = this.getEffectBackgroundSprite(
-                mobEffect.isAmbient() && this.config.ambientBorder);
+    protected void extractBackground(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        Identifier sprite = this.getEffectBackgroundSprite(mobEffect.isAmbient() && this.config.ambientBorder);
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
-                backgroundSprite,
+                sprite,
                 posX,
                 posY,
-                this.getWidth(),
-                this.getHeight(),
+                this.getWidgetWidth(),
+                this.getWidgetHeight(),
                 ARGB.white((float) this.config.widgetTransparency));
+        this.extractEffectBar(guiGraphics, posX, posY, mobEffect);
+    }
+
+    private void extractEffectBar(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         if (!mobEffect.isAmbient() || this.config.effectBar.ambientBar) {
             float durationScale = EffectDurationHandler.getMobEffectDurationScale(mobEffect,
                     this.config.effectBar.unknownStartingDuration);
             if (durationScale > 0.0F && this.config.effectBar.effectBar) {
-                BarPosition barPosition = this.config.effectBar.barPosition;
-                Identifier barSprite = this.getEffectBarSprite(barPosition);
+                BarPosition position = this.config.effectBar.barPosition;
+                Identifier sprite = this.getEffectBarSprite(position);
                 int borderSize = this.getBorderSize() * 2;
-                int scaledWidth =
-                        borderSize + Mth.ceil(barPosition.getScaledWidth(this.getWidth() - borderSize, durationScale));
-                int scaledHeight = borderSize + Mth.ceil(barPosition.getScaledHeight(this.getHeight() - borderSize,
+                int scaledWidth = borderSize + Mth.ceil(position.getScaledWidth(this.getWidgetWidth() - borderSize,
                         durationScale));
-                boolean flipAxis = barPosition.flipAxis != this.config.effectBar.flipAxis;
-                int mobEffectColor = this.config.effectBar.barColor.getMobEffectColor(mobEffect);
+                int scaledHeight = borderSize + Mth.ceil(position.getScaledHeight(this.getWidgetHeight() - borderSize,
+                        durationScale));
+                boolean flipAxis = position.flipAxis != this.config.effectBar.flipAxis;
+                int color = this.config.effectBar.barColor.getMobEffectColor(mobEffect);
                 guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
-                        barSprite,
-                        posX + (flipAxis ? this.getWidth() - scaledWidth : 0),
-                        posY + (flipAxis ? this.getHeight() - scaledHeight : 0),
+                        sprite,
+                        posX + (flipAxis ? this.getWidgetWidth() - scaledWidth : 0),
+                        posY + (flipAxis ? this.getWidgetHeight() - scaledHeight : 0),
                         scaledWidth,
                         scaledHeight,
                         ARGB.color((float) (this.config.widgetTransparency * this.config.effectBar.barTransparency),
-                                mobEffectColor));
+                                color));
             }
         }
     }
@@ -326,12 +329,12 @@ public abstract class AbstractMobEffectRenderer {
 
     protected abstract Identifier getEffectBarSprite(BarPosition barPosition);
 
-    protected void renderSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    protected void extractIcon(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         int spriteX = posX + this.getSpriteOffsetX();
         int spriteY = posY + this.getSpriteOffsetY(this.getEffectDuration(mobEffect, -1) == null);
         float blinkingAlpha = this.config.blinkingSprite ? this.getBlinkingAlpha(mobEffect) : 1.0F;
         int color = ARGB.white(blinkingAlpha * (float) this.config.widgetTransparency);
-        if (!this.renderCustomSprite(guiGraphics, spriteX, spriteY, mobEffect, color)) {
+        if (!this.extractCustomIcon(guiGraphics, spriteX, spriteY, mobEffect, color)) {
             Identifier sprite = Hud.getMobEffectSprite(mobEffect.getEffect());
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
                     sprite,
@@ -343,7 +346,7 @@ public abstract class AbstractMobEffectRenderer {
         }
     }
 
-    private boolean renderCustomSprite(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect, int color) {
+    private boolean extractCustomIcon(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect, int color) {
         return this.environment.map((Hud hud) -> {
             return ClientAbstractions.INSTANCE.extractHudIcon(mobEffect,
                     hud,
@@ -365,11 +368,11 @@ public abstract class AbstractMobEffectRenderer {
         });
     }
 
-    protected void renderForeground(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+    protected void extractForeground(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
         if (mobEffect.getAmplifier() >= 1 && mobEffect.getAmplifier() <= 8) {
             int mobEffectColor = this.config.effectAmplifier.amplifierColor.getMobEffectColor(mobEffect);
-            AnchorPoint.Positioner positioner = this.config.effectAmplifier.amplifierPosition.createPositioner(this.getWidth(),
-                    this.getHeight(),
+            AnchorPoint.Positioner positioner = this.config.effectAmplifier.amplifierPosition.createPositioner(this.getWidgetWidth(),
+                    this.getWidgetHeight(),
                     TINY_NUMBER_WIDTH,
                     TINY_NUMBER_HEIGHT);
             int offsetX = positioner.getPosX(this.getAmplifierOffsetX());
@@ -401,8 +404,8 @@ public abstract class AbstractMobEffectRenderer {
         }
     }
 
-    protected void renderLabels(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
-        Component component = this.getEffectDuration(mobEffect, this.getWidth() - this.getBorderSize() * 2);
+    protected void extractText(GuiGraphicsExtractor guiGraphics, int posX, int posY, MobEffectInstance mobEffect) {
+        Component component = this.getEffectDuration(mobEffect, this.getWidgetWidth() - this.getBorderSize() * 2);
         if (component != null) {
             Font font = Minecraft.getInstance().font;
             int x = posX + this.getDurationOffsetX() - font.width(component) / 2;

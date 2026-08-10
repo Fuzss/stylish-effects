@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class GuiMobEffectRenderer extends AbstractMobEffectRenderer {
+public abstract class GuiMobEffectExtractor extends AbstractMobEffectExtractor {
     protected static final Identifier EFFECT_BACKGROUND_SPRITE = Identifier.withDefaultNamespace("hud/effect_background");
     protected static final Identifier EFFECT_BACKGROUND_AMBIENT_SPRITE = Identifier.withDefaultNamespace(
             "hud/effect_background_ambient");
@@ -34,17 +34,17 @@ public abstract class GuiMobEffectRenderer extends AbstractMobEffectRenderer {
                     .put(BarPosition.LEFT, StylishEffects.id("hud/effect_background_overlay_left"))
                     .build());
 
-    public GuiMobEffectRenderer(Either<Hud, AbstractContainerScreen<?>> environment) {
+    public GuiMobEffectExtractor(Either<Hud, AbstractContainerScreen<?>> environment) {
         super(environment);
     }
 
     @Override
-    public int getWidth() {
+    public int getWidgetWidth() {
         return 24;
     }
 
     @Override
-    public int getHeight() {
+    public int getWidgetHeight() {
         return 24;
     }
 
@@ -71,7 +71,7 @@ public abstract class GuiMobEffectRenderer extends AbstractMobEffectRenderer {
 
     @Override
     protected int getDurationOffsetY() {
-        return this.getHeight() - 10;
+        return this.getWidgetHeight() - 10;
     }
 
     @Override
@@ -112,7 +112,8 @@ public abstract class GuiMobEffectRenderer extends AbstractMobEffectRenderer {
             mobEffectPositions.add(Pair.of(effect, this.translateMobEffectWidgetPosition(posX, posY, mobEffects)));
         }
 
-        // sorting is need for rendering in condensed mode (when too many effects are active and the widgets overlap), so that the overlap is in the right order
+        // Sorting is need for rendering in condensed mode (when too many effects are active and the widgets overlap).
+        // This makes the overlap appear in the right order.
         if (this.config.separateEffects()) {
             mobEffectPositions.sort(Comparator.<Pair<MobEffectInstance, Vector2ic>, Boolean>comparing((Pair<MobEffectInstance, Vector2ic> pair) -> pair.getLeft()
                     .getEffect()
@@ -145,21 +146,21 @@ public abstract class GuiMobEffectRenderer extends AbstractMobEffectRenderer {
         return EFFECT_BACKGROUND_OVERLAY_SPRITES.get(barPosition);
     }
 
-    public static class Small extends GuiMobEffectRenderer {
+    public static class Small extends GuiMobEffectExtractor {
 
         public Small(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
         }
     }
 
-    public static class Large extends GuiMobEffectRenderer {
+    public static class Large extends GuiMobEffectExtractor {
 
         public Large(Either<Hud, AbstractContainerScreen<?>> environment) {
             super(environment);
         }
 
         @Override
-        public int getWidth() {
+        public int getWidgetWidth() {
             return 30;
         }
 

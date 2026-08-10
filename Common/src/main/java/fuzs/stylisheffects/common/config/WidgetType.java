@@ -1,10 +1,9 @@
 package fuzs.stylisheffects.common.config;
 
 import com.mojang.datafixers.util.Either;
-import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractMobEffectRenderer;
-import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.GuiMobEffectRenderer;
-import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.InventoryMobEffectRenderer;
-import net.minecraft.client.gui.Gui;
+import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractMobEffectExtractor;
+import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.GuiMobEffectExtractor;
+import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.InventoryMobEffectExtractor;
 import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
@@ -23,19 +22,19 @@ public enum WidgetType {
     /**
      * vanilla's native effect rendering on the in-game gui
      */
-    GUI_SQUARE(GuiMobEffectRenderer.Small::new),
+    GUI_SQUARE(GuiMobEffectExtractor.Small::new),
     /**
      * our default rendering, similar to {@link #GUI_SQUARE}, just slightly larger with more information
      */
-    GUI_RECTANGLE(GuiMobEffectRenderer.Large::new),
+    GUI_RECTANGLE(GuiMobEffectExtractor.Large::new),
     /**
      * vanilla's compact inventory widgets
      */
-    INVENTORY_SQUARE(InventoryMobEffectRenderer.Small::new),
+    INVENTORY_SQUARE(InventoryMobEffectExtractor.Small::new),
     /**
      * vanilla's full sized inventory widgets
      */
-    INVENTORY_RECTANGLE(InventoryMobEffectRenderer.Large::new);
+    INVENTORY_RECTANGLE(InventoryMobEffectExtractor.Large::new);
 
     public final Factory factory;
 
@@ -44,7 +43,7 @@ public enum WidgetType {
     }
 
     @FunctionalInterface
-    public interface Factory extends Function<Either<Hud, AbstractContainerScreen<?>>, AbstractMobEffectRenderer> {
+    public interface Factory extends Function<Either<Hud, AbstractContainerScreen<?>>, AbstractMobEffectExtractor> {
 
     }
 }

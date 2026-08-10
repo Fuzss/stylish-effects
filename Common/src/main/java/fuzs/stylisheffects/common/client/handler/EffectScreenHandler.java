@@ -6,7 +6,7 @@ import fuzs.puzzleslib.common.api.event.v1.core.EventResultHolder;
 import fuzs.puzzleslib.common.api.event.v1.data.MutableBoolean;
 import fuzs.puzzleslib.common.api.event.v1.data.MutableInt;
 import fuzs.stylisheffects.common.StylishEffects;
-import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractMobEffectRenderer;
+import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractMobEffectExtractor;
 import fuzs.stylisheffects.common.config.ClientConfig;
 import fuzs.stylisheffects.common.config.WidgetType;
 import net.minecraft.client.DeltaTracker;
@@ -33,9 +33,9 @@ public class EffectScreenHandler {
     public static final String KEY_DEBUG_MENU_TYPE = StylishEffects.id("menu_opening").toLanguageKey("screen", "debug");
 
     @Nullable
-    private static AbstractMobEffectRenderer guiMobEffectRenderer;
+    private static AbstractMobEffectExtractor guiMobEffectRenderer;
     @Nullable
-    private static AbstractMobEffectRenderer inventoryMobEffectRenderer;
+    private static AbstractMobEffectExtractor inventoryMobEffectRenderer;
 
     private EffectScreenHandler() {
         // NO-OP
@@ -43,7 +43,7 @@ public class EffectScreenHandler {
 
     public static void rebuildGuiRenderer(Minecraft minecraft) {
         // This can be null when the Minecraft class is not yet fully initialized.
-        if (minecraft.gui != null) {
+        if (minecraft.gui != null && minecraft.gui.hud != null) {
             WidgetType widgetType = StylishEffects.CONFIG.get(ClientConfig.class).hudWidgets.widgetType;
             if (widgetType != WidgetType.NONE) {
                 guiMobEffectRenderer = widgetType.factory.apply(Either.left(minecraft.gui.hud));
@@ -53,13 +53,13 @@ public class EffectScreenHandler {
         }
     }
 
-    public static void renderStatusEffects(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
+    public static void extractStatusEffects(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         if (guiMobEffectRenderer != null && !isScreenWithEffectsInInventory(minecraft.gui.screen())) {
             List<MobEffectInstance> mobEffects = guiMobEffectRenderer.getMobEffects(minecraft.player);
             if (!mobEffects.isEmpty()) {
                 guiMobEffectRenderer.init();
-                guiMobEffectRenderer.renderEffectWidgets(guiGraphics, mobEffects);
+                guiMobEffectRenderer.extractEffectWidgets(guiGraphics, mobEffects);
             }
         }
     }
@@ -79,10 +79,10 @@ public class EffectScreenHandler {
     }
 
     @Nullable
-    private static AbstractMobEffectRenderer createInventoryRenderer(AbstractContainerScreen<?> screen) {
+    private static AbstractMobEffectExtractor createInventoryRenderer(AbstractContainerScreen<?> screen) {
         WidgetType widgetType = StylishEffects.CONFIG.get(ClientConfig.class).inventoryWidgets.widgetType;
         if (widgetType != WidgetType.NONE && isScreenWithEffectsInInventory(screen)) {
-            AbstractMobEffectRenderer mobEffectRenderer = widgetType.factory.apply(Either.right(screen));
+            AbstractMobEffectExtractor mobEffectRenderer = widgetType.factory.apply(Either.right(screen));
             if (StylishEffects.CONFIG.get(ClientConfig.class).inventoryWidgets.supportUsingSmallerWidgets) {
                 while (!mobEffectRenderer.hasEnoughSpace()) {
                     WidgetType.Factory widgetTypeFactory = mobEffectRenderer.getFallbackRenderer();
@@ -126,7 +126,7 @@ public class EffectScreenHandler {
             List<MobEffectInstance> mobEffects = inventoryMobEffectRenderer.getMobEffects(screen.minecraft.player);
             if (!mobEffects.isEmpty()) {
                 inventoryMobEffectRenderer.init();
-                inventoryMobEffectRenderer.renderEffectWidgets(guiGraphics, mobEffects);
+                inventoryMobEffectRenderer.extractEffectWidgets(guiGraphics, mobEffects);
                 if (screen.getMenu().getCarried().isEmpty()) {
                     inventoryMobEffectRenderer.getHoveredEffectTooltip(mouseX, mouseY, mobEffects)
                             .ifPresent((List<Component> tooltip) -> {

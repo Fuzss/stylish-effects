@@ -4,7 +4,7 @@ import fuzs.puzzleslib.common.api.client.gui.v2.AnchorPoint;
 import fuzs.puzzleslib.common.api.config.v3.Config;
 import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
 import fuzs.puzzleslib.common.api.config.v3.serialization.ConfigDataSet;
-import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractMobEffectRenderer;
+import fuzs.stylisheffects.common.client.gui.screens.inventory.effects.AbstractMobEffectExtractor;
 import fuzs.stylisheffects.common.client.util.ColorUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
@@ -42,7 +42,7 @@ public class ClientConfig implements ConfigCore {
         public boolean skipInfiniteEffects = false;
         @Config(description = "Custom scale for the effect widgets.")
         @Config.DoubleRange(min = 1.0, max = 16.0)
-        public double widgetScale = AbstractMobEffectRenderer.DEFAULT_WIDGET_SCALE;
+        public double widgetScale = AbstractMobEffectExtractor.DEFAULT_WIDGET_SCALE;
         @Config(description = "The transparency value for effect widgets with one making it opaque, and zero making it fully invisible.")
         @Config.DoubleRange(min = 0.0, max = 1.0)
         public double widgetTransparency = 1.0;
