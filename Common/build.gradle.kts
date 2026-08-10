@@ -1,5 +1,3 @@
-import fuzs.multiloader.extension.packageName
-
 plugins {
     id("fuzs.multiloader.multiloader-convention-plugins-common")
 }
