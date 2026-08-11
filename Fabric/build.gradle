@@ -25,10 +25,10 @@ dependencies {
     modCompileOnlyApi libs.architectury.fabric
     modCompileOnlyApi libs.reiapi.fabric
     modCompileOnlyApi libs.reidefaultplugin.fabric
-    modLocalRuntime libs.jei.fabric
-//    modLocalRuntime libs.cloth.fabric
-//    modLocalRuntime libs.architectury.fabric
-//    modLocalRuntime libs.rei.fabric
+//    modLocalRuntime libs.jei.fabric
+    modLocalRuntime libs.cloth.fabric
+    modLocalRuntime libs.architectury.fabric
+    modLocalRuntime libs.rei.fabric
 
     // Quality of Life Mods
     versionCatalog.findLibrary("modmenu.fabric").ifPresent {
