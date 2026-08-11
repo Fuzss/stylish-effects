@@ -1,6 +1,5 @@
 package fuzs.stylisheffects.mixin;
 
-import fuzs.stylisheffects.StylishEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -23,8 +22,7 @@ public class ModMixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!FabricLoader.getInstance().isModLoaded("puzzleslib")) return false;
-        return StylishEffects.shouldApplyMixin(targetClassName, mixinClassName);
+        return FabricLoader.getInstance().isModLoaded("puzzleslib");
     }
 
     @Override

@@ -1,6 +1,5 @@
 package fuzs.stylisheffects.mixin;
 
-import fuzs.stylisheffects.StylishEffects;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -23,8 +22,7 @@ public class ModMixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (FMLLoader.getLoadingModList().getModFileById("puzzleslib") == null) return false;
-        return StylishEffects.shouldApplyMixin(targetClassName, mixinClassName);
+        return FMLLoader.getLoadingModList().getModFileById("puzzleslib") != null;
     }
 
     @Override

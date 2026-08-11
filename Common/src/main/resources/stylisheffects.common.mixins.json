@@ -6,7 +6,6 @@
   "refmap": "stylisheffects.refmap.json",
   "plugin": "fuzs.stylisheffects.mixin.ModMixinConfigPlugin",
   "mixins": [
-    "integration.jei.InventoryEffectRendererGuiHandlerMixin",
     "integration.rei.DefaultPotionEffectExclusionZonesMixin"
   ],
   "client": [
