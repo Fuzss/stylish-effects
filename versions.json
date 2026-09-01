@@ -6,11 +6,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "543661",
-    "distributions.curseforge.slug": "stylish-effects",
-    "distributions.github.slug": "stylish-effects",
-    "distributions.modrinth.id": "onDuQF5e",
-    "distributions.modrinth.slug": "stylish-effects"
+  "distributions": {
+    "curseforge": {
+      "id": "543661",
+      "slug": "stylish-effects"
+    },
+    "github": {
+      "slug": "stylish-effects"
+    },
+    "modrinth": {
+      "id": "onDuQF5e",
+      "slug": "stylish-effects"
+    }
   }
 }
