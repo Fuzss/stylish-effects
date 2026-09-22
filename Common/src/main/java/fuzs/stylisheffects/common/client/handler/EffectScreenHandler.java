@@ -12,7 +12,6 @@ import fuzs.stylisheffects.common.config.WidgetType;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
@@ -26,8 +25,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 public class EffectScreenHandler {
     public static final String KEY_DEBUG_MENU_TYPE = StylishEffects.id("menu_opening").toLanguageKey("screen", "debug");
@@ -64,7 +61,7 @@ public class EffectScreenHandler {
         }
     }
 
-    public static void onAfterInit(AbstractContainerScreen<?> screen, int screenWidth, int screenHeight, List<AbstractWidget> widgets, UnaryOperator<AbstractWidget> addWidget, Consumer<AbstractWidget> removeWidget) {
+    public static void onAfterInit(AbstractContainerScreen<?> screen, int screenWidth, int screenHeight) {
         // This ensures the init method was called for the current screen via Minecraft::setScreen.
         // When opening the creative mode inventory, there always is a trailing init call for the survival inventory that messes this up otherwise.
         if (screen == screen.minecraft.gui.screen()) {

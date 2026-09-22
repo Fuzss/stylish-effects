@@ -10,9 +10,9 @@ dependencies {
     modApi(sharedLibs.puzzleslib.fabric)
     modCompileOnly(sharedLibs.jeiapi.common)
 //    modLocalRuntime(sharedLibs.jei.fabric)
-    modCompileOnly(sharedLibs.bundles.reiapi.fabric)
-    modCompileOnly(sharedLibs.reidefaultplugin.fabric)
-    modLocalRuntime(sharedLibs.bundles.rei.fabric)
+//    modCompileOnly(sharedLibs.bundles.reiapi.fabric)
+//    modCompileOnly(sharedLibs.reidefaultplugin.fabric)
+//    modLocalRuntime(sharedLibs.bundles.rei.fabric)
 }
 
 multiloader {
@@ -22,10 +22,10 @@ multiloader {
                 "jei_mod_plugin",
                 "${project.group}.${project.commonProject.packageName}.integration.jei.StylishEffectsJeiPlugin"
             )
-            entrypoint(
-                "rei_client",
-                "${project.group}.${project.commonProject.packageName}.integration.rei.StylishEffectsReiPlugin"
-            )
+//            entrypoint(
+//                "rei_client",
+//                "${project.group}.${project.commonProject.packageName}.integration.rei.StylishEffectsReiPlugin"
+//            )
         }
     }
 }
